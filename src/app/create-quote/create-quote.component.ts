@@ -14,10 +14,11 @@ import {map, startWith} from 'rxjs/operators';
 export class CreateQuoteComponent implements OnInit {
   quoteForm;
 
-  nameOptions: string[] = ['Oil Filter', 'Oil', 'Service'];
-  filteredNameOptions: Observable<string[]>[] = [];
+  partNameOptions: string[] = ['Oil filter', 'Oil', 'Brake pads'];
+  filteredPartNameOptions: Observable<string[]>[] = [];
 
-  extra: boolean[] = [];
+  labourNameOptions: string[] = ['Change oil', 'Replace filter', 'Service'];
+  filteredLabourNameOptions: Observable<string[]>[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -31,13 +32,13 @@ export class CreateQuoteComponent implements OnInit {
     return this.quoteForm.get('labour') as FormArray;
   }
 
-  get consumables() {
-    return this.quoteForm.get('consumables') as FormArray;
-  }
+  // get consumables() {
+  //   return this.quoteForm.get('consumables') as FormArray;
+  // }
 
-  get other() {
-    return this.quoteForm.get('other') as FormArray;
-  }
+  // get other() {
+  //   return this.quoteForm.get('other') as FormArray;
+  // }
 
   ngOnInit() {
     this.initForm();
@@ -89,16 +90,29 @@ export class CreateQuoteComponent implements OnInit {
     });
   }
 
-  nameChanges() {
+  partNameChanges() {
     return this.parts.controls[this.parts.length - 1].get('name').valueChanges
       .pipe(
         startWith(''),
-        map(value => this._filter(value, this.nameOptions))
+        map(value => this._filter(value, this.partNameOptions))
       )
   }
 
-  costChanges() {
+  labourNameChanges() {
+    return this.labour.controls[this.labour.length - 1].get('name').valueChanges
+      .pipe(
+        startWith(''),
+        map(value => this._filter(value, this.labourNameOptions))
+      )
+  }
+
+  partCostChanges() {
     return this.parts.controls[this.parts.length - 1].get('cost').valueChanges
+      .subscribe(() => this.updateTotalCost())
+  }
+
+  labourCostChanges() {
+    return this.labour.controls[this.labour.length - 1].get('cost').valueChanges
       .subscribe(() => this.updateTotalCost())
   }
 
@@ -107,8 +121,12 @@ export class CreateQuoteComponent implements OnInit {
       .map(e => e.get('cost').value)
       .reduce((prev, curr) => prev + curr, 0);
     
+    const sumLabour = this.labour.controls
+      .map(e => e.get('cost').value)
+      .reduce((prev, curr) => prev + curr, 0);
+    
     this.quoteForm.patchValue(
-      {cost: sumParts}
+      {cost: sumParts + sumLabour}
     )
   }
 
@@ -118,15 +136,16 @@ export class CreateQuoteComponent implements OnInit {
     return options.filter(option => option.toLowerCase().includes(filterValue));
   }
 
-  addItem() {
+  addPart() {
     this.parts.push(this.partForm());
-    this.filteredNameOptions.push(this.nameChanges());
-    this.costChanges();
-    this.extra.push(false);
+    this.filteredPartNameOptions.push(this.partNameChanges());
+    this.partCostChanges();
   }
 
-  isLabour(i) {
-    return this.parts.value[i].itemType === "Labour";
+  addLabour() {
+    this.labour.push(this.labourForm());
+    this.filteredLabourNameOptions.push(this.labourNameChanges());
+    this.labourCostChanges();
   }
 
   onSubmit() {

@@ -2,7 +2,7 @@
 <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
   <mat-form-field appearance="outline">
     <mat-label>Cost</mat-label>
-    <input type="number" matInput formControlName="cost" [readonly]="parts.length != 0">
+    <input type="number" matInput formControlName="cost" [readonly]="parts.length || labour.length">
   </mat-form-field>
 
   <mat-card>
@@ -14,30 +14,20 @@
           <mat-label>Name</mat-label>
           <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
           <mat-autocomplete #autoName="matAutocomplete">
-            <mat-option *ngFor="let option of filteredNameOptions[i] | async" [value]="option">
+            <mat-option *ngFor="let option of filteredPartNameOptions[i] | async" [value]="option">
               {{option}}
             </mat-option>
           </mat-autocomplete>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" *ngIf="!isLabour(i)">
+        <mat-form-field appearance="outline">
           <mat-label>Quantity</mat-label>
           <input type="number" matInput formControlName="quantity">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" *ngIf="isLabour(i)">
-          <mat-label>Duration</mat-label>
-          <input matInput formControlName="duration">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Unique ID</mat-label>
           <input matInput formControlName="uid">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline" *ngIf="extra[i]">
-          <mat-label>Extra</mat-label>
-          <input matInput formControlName="extra">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
@@ -47,7 +37,43 @@
       </div>
     </mat-card>
     <mat-card-actions>
-      <a mat-button (click)="addItem()">Add Item</a>
+      <a mat-button (click)="addPart()">Add Item</a>
+    </mat-card-actions>
+  </mat-card>
+
+  <mat-card>
+    <mat-card-title>Labour</mat-card-title>
+    <mat-card formArrayName="labour" *ngFor="let item of labour.controls; let i = index;">
+      <div [formGroupName]="i" fxLayout="row wrap" fxLayoutAlign="space-between">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
+          <mat-autocomplete #autoName="matAutocomplete">
+            <mat-option *ngFor="let option of filteredLabourNameOptions[i] | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Duration</mat-label>
+          <input matInput formControlName="duration">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Unique ID</mat-label>
+          <input matInput formControlName="uid">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cost</mat-label>
+          <input type="number" matInput formControlName="cost">
+        </mat-form-field>
+      </div>
+    </mat-card>
+    <mat-card-actions>
+      <a mat-button (click)="addLabour()">Add Item</a>
     </mat-card-actions>
   </mat-card>
 
