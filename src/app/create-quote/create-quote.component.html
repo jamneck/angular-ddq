@@ -5,7 +5,8 @@
     <input type="number" matInput formControlName="cost" [readonly]="parts.length != 0">
   </mat-form-field>
 
-  <div class="full-width">
+  <mat-card>
+    <mat-card-title>Parts</mat-card-title>
     <mat-card formArrayName="parts" *ngFor="let item of parts.controls; let i = index;">
       <div [formGroupName]="i" fxLayout="row wrap" fxLayoutAlign="space-between">
 
@@ -45,9 +46,10 @@
         </mat-form-field>
       </div>
     </mat-card>
-  </div>
-
-  <a mat-button (click)="addItem()">Add Item</a>
+    <mat-card-actions>
+      <a mat-button (click)="addItem()">Add Item</a>
+    </mat-card-actions>
+  </mat-card>
 
   <button mat-button [disabled]="!quoteForm.valid">Submit</button>
 </form>
