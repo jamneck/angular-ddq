@@ -3,6 +3,8 @@ import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
+import {PartsService} from '../parts.service';
+
 /**
  * @title Filter autocomplete
  */
@@ -14,7 +16,7 @@ import {map, startWith} from 'rxjs/operators';
 export class CreateQuoteComponent implements OnInit {
   quoteForm;
 
-  partNameOptions: string[] = ['Oil filter', 'Oil', 'Brake pads'];
+  partNameOptions: string[];
   filteredPartNameOptions: Observable<string[]>[] = [];
 
   labourNameOptions: string[] = ['Change oil', 'Replace filter', 'Service'];
@@ -22,6 +24,7 @@ export class CreateQuoteComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private partsService: PartsService
   ) { }
 
   get parts() {
@@ -41,12 +44,13 @@ export class CreateQuoteComponent implements OnInit {
   // }
 
   ngOnInit() {
+    this.getParts();
     this.initForm();
   }
 
   initForm() {
     this.quoteForm = this.fb.group({
-      cost: [null, Validators.required],
+      // cost: [null, Validators.required],
       parts: this.fb.array([]),
       labour: this.fb.array([]),
       consumables: this.fb.array([]),
@@ -58,8 +62,8 @@ export class CreateQuoteComponent implements OnInit {
     return this.fb.group({
       name: '',
       uid: '',
-      quantity: '',
-      cost: ''
+      unit_cost: null,
+      quantity: 1
     });
   }
 
@@ -106,28 +110,40 @@ export class CreateQuoteComponent implements OnInit {
       )
   }
 
-  partCostChanges() {
-    return this.parts.controls[this.parts.length - 1].get('cost').valueChanges
-      .subscribe(() => this.updateTotalCost())
-  }
+  // partCostChanges() {
+  //   return this.parts.controls[this.parts.length - 1].get('cost').valueChanges
+  //     .subscribe(() => this.updateTotalCost())
+  // }
 
-  labourCostChanges() {
-    return this.labour.controls[this.labour.length - 1].get('cost').valueChanges
-      .subscribe(() => this.updateTotalCost())
-  }
+  // labourCostChanges() {
+  //   return this.labour.controls[this.labour.length - 1].get('cost').valueChanges
+  //     .subscribe(() => this.updateTotalCost())
+  // }
 
-  updateTotalCost() {
+  // updateTotalCost() {
+  //   const sumParts = this.parts.controls
+  //     .map(e => e.get('cost').value)
+  //     .reduce((prev, curr) => prev + curr, 0);
+    
+  //   const sumLabour = this.labour.controls
+  //     .map(e => e.get('cost').value)
+  //     .reduce((prev, curr) => prev + curr, 0);
+    
+  //   this.quoteForm.patchValue(
+  //     {cost: sumParts + sumLabour}
+  //   )
+  // }
+
+  get totalCost() {
     const sumParts = this.parts.controls
-      .map(e => e.get('cost').value)
+      .map(e => e.get('unit_cost').value * e.get('quantity').value)
       .reduce((prev, curr) => prev + curr, 0);
     
     const sumLabour = this.labour.controls
       .map(e => e.get('cost').value)
       .reduce((prev, curr) => prev + curr, 0);
     
-    this.quoteForm.patchValue(
-      {cost: sumParts + sumLabour}
-    )
+    return sumParts + sumLabour
   }
 
   private _filter(value: string, options: string[] = []): string[] {
@@ -139,17 +155,27 @@ export class CreateQuoteComponent implements OnInit {
   addPart() {
     this.parts.push(this.partForm());
     this.filteredPartNameOptions.push(this.partNameChanges());
-    this.partCostChanges();
+    // this.partCostChanges();
   }
 
   addLabour() {
     this.labour.push(this.labourForm());
     this.filteredLabourNameOptions.push(this.labourNameChanges());
-    this.labourCostChanges();
+    // this.labourCostChanges();
   }
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
     alert(JSON.stringify(this.quoteForm.value));
+  }
+
+  getParts() {
+    this.partsService.getParts()
+      .subscribe(result => this.partNameOptions = result['parts'])
+  }
+
+  partItemTotal(i: number) {
+    const item = this.parts.controls[i].value;
+    return item.quantity * item.unit_cost
   }
 }
