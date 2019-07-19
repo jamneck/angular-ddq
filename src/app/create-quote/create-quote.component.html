@@ -1,0 +1,53 @@
+
+<form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="outline">
+    <mat-label>Cost</mat-label>
+    <input type="number" matInput formControlName="cost" [readonly]="parts.length != 0">
+  </mat-form-field>
+
+  <div class="full-width">
+    <mat-card formArrayName="parts" *ngFor="let item of parts.controls; let i = index;">
+      <div [formGroupName]="i" fxLayout="row wrap" fxLayoutAlign="space-between">
+
+        <mat-form-field appearance="outline">
+          <mat-label>Name</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
+          <mat-autocomplete #autoName="matAutocomplete">
+            <mat-option *ngFor="let option of filteredNameOptions[i] | async" [value]="option">
+              {{option}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="!isLabour(i)">
+          <mat-label>Quantity</mat-label>
+          <input type="number" matInput formControlName="quantity">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="isLabour(i)">
+          <mat-label>Duration</mat-label>
+          <input matInput formControlName="duration">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Unique ID</mat-label>
+          <input matInput formControlName="uid">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" *ngIf="extra[i]">
+          <mat-label>Extra</mat-label>
+          <input matInput formControlName="extra">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cost</mat-label>
+          <input type="number" matInput formControlName="cost">
+        </mat-form-field>
+      </div>
+    </mat-card>
+  </div>
+
+  <a mat-button (click)="addItem()">Add Item</a>
+
+  <button mat-button [disabled]="!quoteForm.valid">Submit</button>
+</form>
