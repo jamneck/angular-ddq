@@ -50,7 +50,6 @@ export class CreateQuoteComponent implements OnInit {
 
   initForm() {
     this.quoteForm = this.fb.group({
-      // cost: [null, Validators.required],
       parts: this.fb.array([]),
       labour: this.fb.array([]),
       consumables: this.fb.array([]),
@@ -71,8 +70,8 @@ export class CreateQuoteComponent implements OnInit {
     return this.fb.group({
       name: '',
       uid: '',
-      duration: '',
-      cost: '',
+      duration: null,
+      hourly_cost: null,
     });
   }
 
@@ -140,7 +139,7 @@ export class CreateQuoteComponent implements OnInit {
       .reduce((prev, curr) => prev + curr, 0);
     
     const sumLabour = this.labour.controls
-      .map(e => e.get('cost').value)
+      .map(e => e.get('hourly_cost').value * e.get('duration').value)
       .reduce((prev, curr) => prev + curr, 0);
     
     return sumParts + sumLabour
@@ -177,5 +176,10 @@ export class CreateQuoteComponent implements OnInit {
   partItemTotal(i: number) {
     const item = this.parts.controls[i].value;
     return item.quantity * item.unit_cost
+  }
+
+  labourItemTotal(i: number) {
+    const item = this.labour.controls[i].value;
+    return item.duration * item.hourly_cost
   }
 }

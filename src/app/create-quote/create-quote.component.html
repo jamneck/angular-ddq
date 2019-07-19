@@ -1,15 +1,15 @@
 <mat-card>
   <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
-    <h2>Total: R{{ totalCost }}</h2>
+    <h1>Quote</h1>
 
-    <mat-card>
-      <mat-card-title>Parts</mat-card-title>
-      <mat-card formArrayName="parts" *ngFor="let item of parts.controls; let i = index;">
-        <div [formGroupName]="i" fxLayout="row wrap" fxLayoutAlign="space-between">
+    <div>
+      <h2>Parts</h2>
+      <div formArrayName="parts" *ngFor="let item of parts.controls; let i = index;">
+        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="30px">
 
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>Name</mat-label>
-            <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
+            <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName" autocomplete="off">
             <mat-autocomplete #autoName="matAutocomplete">
               <mat-option *ngFor="let option of filteredPartNameOptions[i] | async" [value]="option">
                 {{option}}
@@ -17,41 +17,39 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>Unique ID</mat-label>
             <input matInput formControlName="uid">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Unit Cost</mat-label>
-            <input type="number" matInput formControlName="unit_cost">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>Quantity</mat-label>
             <input type="number" matInput formControlName="quantity">
           </mat-form-field>
 
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Cost</mat-label>
-            <input type="number" matInput formControlName="cost">
-          </mat-form-field> -->
+          <mat-form-field>
+            <mat-label>Unit Cost</mat-label>
+            <input type="number" matInput formControlName="unit_cost">
+            <span matPrefix>R&nbsp;</span>
+          </mat-form-field>
+
           <div>
-            R{{ partItemTotal(i) }}
+            <mat-label>Cost</mat-label>
+            <p>R{{ partItemTotal(i) }}</p>
           </div>
         </div>
-      </mat-card>
-      <mat-card-actions>
-        <a mat-button (click)="addPart()">Add Item</a>
-      </mat-card-actions>
-    </mat-card>
+      </div>
+      <mat-divider></mat-divider>
+      <a mat-button (click)="addPart()">Add Item</a>
+    </div>
 
-    <mat-card>
-      <mat-card-title>Labour</mat-card-title>
-      <mat-card formArrayName="labour" *ngFor="let item of labour.controls; let i = index;">
-        <div [formGroupName]="i" fxLayout="row wrap" fxLayoutAlign="space-between">
+    <div>
+      <h2>Labour</h2>
 
-          <mat-form-field appearance="outline">
+      <div formArrayName="labour" *ngFor="let item of labour.controls; let i = index; last as last">
+        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="30px">
+
+          <mat-form-field>
             <mat-label>Name</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
             <mat-autocomplete #autoName="matAutocomplete">
@@ -61,27 +59,35 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Duration</mat-label>
-            <input matInput formControlName="duration">
-          </mat-form-field>
-
-          <mat-form-field appearance="outline">
+          <mat-form-field>
             <mat-label>Unique ID</mat-label>
             <input matInput formControlName="uid">
           </mat-form-field>
 
-          <mat-form-field appearance="outline">
-            <mat-label>Cost</mat-label>
-            <input type="number" matInput formControlName="cost">
+          <mat-form-field>
+            <mat-label>Duration</mat-label>
+            <input matInput formControlName="duration">
+            <mat-hint align="end">Hours</mat-hint>
           </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Hourly Cost</mat-label>
+            <input type="number" matInput formControlName="hourly_cost">
+            <span matPrefix>R&nbsp;</span>
+          </mat-form-field>
+
+          <div>
+            <mat-label>Cost</mat-label>
+            <p>R{{ labourItemTotal(i) }}</p>
+          </div>
         </div>
-      </mat-card>
-      <mat-card-actions>
-        <a mat-button (click)="addLabour()">Add Item</a>
-      </mat-card-actions>
-    </mat-card>
+      </div>
+      <mat-divider></mat-divider>
+      <a mat-button (click)="addLabour()">Add Item</a>
+    </div>
 
     <button mat-button [disabled]="!quoteForm.valid">Submit</button>
   </form>
+
+  <h2>Total: R{{ totalCost }}</h2>
 </mat-card>
