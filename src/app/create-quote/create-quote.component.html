@@ -37,6 +37,10 @@
             <mat-label>Cost</mat-label>
             <p>R{{ partItemTotal(i) }}</p>
           </div>
+
+          <div>
+            <a mat-button (click)="removePart(i)">X</a>
+          </div>
         </div>
       </div>
       <mat-divider></mat-divider>
@@ -66,8 +70,8 @@
 
           <mat-form-field>
             <mat-label>Duration</mat-label>
-            <input matInput formControlName="duration">
-            <mat-hint align="end">Hours</mat-hint>
+            <input matInput formControlName="duration" placeholder="e.g. 1.5">
+            <span matSuffix>Hrs</span>
           </mat-form-field>
 
           <mat-form-field>
@@ -80,14 +84,17 @@
             <mat-label>Cost</mat-label>
             <p>R{{ labourItemTotal(i) }}</p>
           </div>
+
+          <div>
+            <a mat-button (click)="removeLabour(i)">X</a>
+          </div>
         </div>
       </div>
       <mat-divider></mat-divider>
       <a mat-button (click)="addLabour()">Add Item</a>
     </div>
+    <h2>Total: R{{ totalCost }}</h2>
 
-    <button mat-button [disabled]="!quoteForm.valid">Submit</button>
+    <button type="submit" mat-button [disabled]="!quoteForm.valid">Submit</button>
   </form>
-
-  <h2>Total: R{{ totalCost }}</h2>
 </mat-card>

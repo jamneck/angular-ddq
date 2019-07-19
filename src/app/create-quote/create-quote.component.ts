@@ -50,11 +50,18 @@ export class CreateQuoteComponent implements OnInit {
 
   initForm() {
     this.quoteForm = this.fb.group({
-      parts: this.fb.array([]),
-      labour: this.fb.array([]),
+      parts: this.fb.array([
+        this.partForm()
+      ]),
+      labour: this.fb.array([
+        this.labourForm()
+      ]),
       consumables: this.fb.array([]),
       other: this.fb.array([]),
     })
+
+    this.filteredPartNameOptions.push(this.partNameChanges());
+    this.filteredLabourNameOptions.push(this.labourNameChanges());
   }
 
   partForm() {
@@ -109,30 +116,6 @@ export class CreateQuoteComponent implements OnInit {
       )
   }
 
-  // partCostChanges() {
-  //   return this.parts.controls[this.parts.length - 1].get('cost').valueChanges
-  //     .subscribe(() => this.updateTotalCost())
-  // }
-
-  // labourCostChanges() {
-  //   return this.labour.controls[this.labour.length - 1].get('cost').valueChanges
-  //     .subscribe(() => this.updateTotalCost())
-  // }
-
-  // updateTotalCost() {
-  //   const sumParts = this.parts.controls
-  //     .map(e => e.get('cost').value)
-  //     .reduce((prev, curr) => prev + curr, 0);
-    
-  //   const sumLabour = this.labour.controls
-  //     .map(e => e.get('cost').value)
-  //     .reduce((prev, curr) => prev + curr, 0);
-    
-  //   this.quoteForm.patchValue(
-  //     {cost: sumParts + sumLabour}
-  //   )
-  // }
-
   get totalCost() {
     const sumParts = this.parts.controls
       .map(e => e.get('unit_cost').value * e.get('quantity').value)
@@ -154,13 +137,11 @@ export class CreateQuoteComponent implements OnInit {
   addPart() {
     this.parts.push(this.partForm());
     this.filteredPartNameOptions.push(this.partNameChanges());
-    // this.partCostChanges();
   }
 
   addLabour() {
     this.labour.push(this.labourForm());
     this.filteredLabourNameOptions.push(this.labourNameChanges());
-    // this.labourCostChanges();
   }
 
   onSubmit() {
@@ -181,5 +162,15 @@ export class CreateQuoteComponent implements OnInit {
   labourItemTotal(i: number) {
     const item = this.labour.controls[i].value;
     return item.duration * item.hourly_cost
+  }
+
+  removePart(i: number) {
+    this.filteredPartNameOptions.splice(i, 1);
+    this.parts.removeAt(i);
+  }
+
+  removeLabour(i: number) {
+    this.filteredLabourNameOptions.splice(i, 1);
+    this.labour.removeAt(i);
   }
 }
