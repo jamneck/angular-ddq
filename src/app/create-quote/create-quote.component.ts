@@ -35,13 +35,13 @@ export class CreateQuoteComponent implements OnInit {
     return this.quoteForm.get('labour') as FormArray;
   }
 
-  // get consumables() {
-  //   return this.quoteForm.get('consumables') as FormArray;
-  // }
+  get consumables() {
+    return this.quoteForm.get('consumables') as FormArray;
+  }
 
-  // get other() {
-  //   return this.quoteForm.get('other') as FormArray;
-  // }
+  get other() {
+    return this.quoteForm.get('other') as FormArray;
+  }
 
   ngOnInit() {
     this.getParts();
@@ -56,8 +56,8 @@ export class CreateQuoteComponent implements OnInit {
       labour: this.fb.array([
         this.labourForm()
       ]),
-      consumables: this.fb.array([]),
-      other: this.fb.array([]),
+      consumablesCost: null,
+      expiryDate: this.fb.array([]),
     })
 
     this.filteredPartNameOptions.push(this.partNameChanges());
@@ -67,8 +67,7 @@ export class CreateQuoteComponent implements OnInit {
   partForm() {
     return this.fb.group({
       name: '',
-      uid: '',
-      unit_cost: null,
+      unitCost: null,
       quantity: 1
     });
   }
@@ -76,16 +75,14 @@ export class CreateQuoteComponent implements OnInit {
   labourForm() {
     return this.fb.group({
       name: '',
-      uid: '',
       duration: null,
-      hourly_cost: null,
+      hourlyCost: null,
     });
   }
 
   consumableForm() {
     return this.fb.group({
       name: '',
-      uid: '',
       quantity: '',
       cost: ''
     });
@@ -94,7 +91,6 @@ export class CreateQuoteComponent implements OnInit {
   otherForm() {
     return this.fb.group({
       name: '',
-      uid: '',
       quantity: '',
       cost: ''
     });
@@ -118,11 +114,11 @@ export class CreateQuoteComponent implements OnInit {
 
   get totalCost() {
     const sumParts = this.parts.controls
-      .map(e => e.get('unit_cost').value * e.get('quantity').value)
+      .map(e => e.get('unitCost').value * e.get('quantity').value)
       .reduce((prev, curr) => prev + curr, 0);
     
     const sumLabour = this.labour.controls
-      .map(e => e.get('hourly_cost').value * e.get('duration').value)
+      .map(e => e.get('hourlyCost').value * e.get('duration').value)
       .reduce((prev, curr) => prev + curr, 0);
     
     return sumParts + sumLabour
@@ -156,12 +152,12 @@ export class CreateQuoteComponent implements OnInit {
 
   partItemTotal(i: number) {
     const item = this.parts.controls[i].value;
-    return item.quantity * item.unit_cost
+    return item.quantity * item.unitCost
   }
 
   labourItemTotal(i: number) {
     const item = this.labour.controls[i].value;
-    return item.duration * item.hourly_cost
+    return item.duration * item.hourlyCost
   }
 
   removePart(i: number) {
