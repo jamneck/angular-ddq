@@ -1,13 +1,11 @@
-<mat-card>
+<main class="mat-typography">
   <form [formGroup]="detailForm" (ngSubmit)="onSubmit()">
-    <h1>Quote</h1>
-
-    <div>
-      <h2>Parts</h2>
+    <mat-card>
+      <h4>Parts</h4>
       <div formArrayName="parts" *ngFor="let item of parts.controls; let i = index;">
-        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="30px">
+        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
 
-          <mat-form-field>
+          <mat-form-field fxFlex="30">
             <mat-label>Name</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName" autocomplete="off">
             <mat-autocomplete #autoName="matAutocomplete">
@@ -17,38 +15,37 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Quantity</mat-label>
+          <mat-form-field fxFlex="40px">
+            <mat-label>Qty</mat-label>
             <input type="number" matInput formControlName="quantity">
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Unit Cost</mat-label>
+            <mat-label>Unit</mat-label>
             <input type="number" matInput formControlName="unitCost">
             <span matPrefix>R&nbsp;</span>
           </mat-form-field>
 
           <div>
-            <mat-label>Cost</mat-label>
+            <mat-label>Price</mat-label>
             <p>R{{ partItemTotal(i) }}</p>
           </div>
 
           <div>
-            <a mat-button (click)="removePart(i)">X</a>
+            <a href="javascript:void(0)" (click)="removePart(i)">X</a>
           </div>
         </div>
       </div>
-      <mat-divider></mat-divider>
-      <a mat-button (click)="addPart()">Add Item</a>
-    </div>
+      <a href="javascript:void(0)" (click)="addPart()" class="link">Add Item</a>
+    </mat-card>
 
-    <div>
-      <h2>Labour</h2>
+    <mat-card>
+      <h4>Labour</h4>
 
       <div formArrayName="labour" *ngFor="let item of labour.controls; let i = index; last as last">
-        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start" fxLayoutGap="30px">
+        <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
 
-          <mat-form-field>
+          <mat-form-field fxFlex="30">
             <mat-label>Name</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
             <mat-autocomplete #autoName="matAutocomplete">
@@ -58,33 +55,51 @@
             </mat-autocomplete>
           </mat-form-field>
 
-          <mat-form-field>
-            <mat-label>Duration</mat-label>
+          <mat-form-field fxFlex="40px">
+            <mat-label>Hrs</mat-label>
             <input matInput formControlName="duration" placeholder="e.g. 1.5">
-            <span matSuffix>Hrs</span>
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Hourly Cost</mat-label>
+            <mat-label>Hourly</mat-label>
             <input type="number" matInput formControlName="hourlyCost">
             <span matPrefix>R&nbsp;</span>
           </mat-form-field>
 
           <div>
-            <mat-label>Cost</mat-label>
+            <mat-label>Price</mat-label>
             <p>R{{ labourItemTotal(i) }}</p>
           </div>
 
           <div>
-            <a mat-button (click)="removeLabour(i)">X</a>
+            <a href="javascript:void(0)" (click)="removeLabour(i)">X</a>
           </div>
         </div>
       </div>
-      <mat-divider></mat-divider>
-      <a mat-button (click)="addLabour()">Add Item</a>
-    </div>
-    <h2>Total: R{{ totalCost }}</h2>
+      <a href="javascript:void(0)" (click)="addLabour()" class="link">Add Item</a>
+    </mat-card>
 
-    <button type="submit" mat-button [disabled]="!detailForm.valid">Submit</button>
+    <mat-card>
+      <form [formGroup]="responseForm">
+        <p *ngIf="!anyItems()">
+        <mat-form-field>
+          <mat-label>Cost</mat-label>
+          <input type="number" matInput formControlName="cost">
+          <span matPrefix>R&nbsp;</span>
+        </mat-form-field>
+        </p>
+
+        <p *ngIf="anyItems()">Total: R{{ totalCost }}</p>
+
+        <!-- <p>
+        <mat-form-field>
+          <mat-label>Message</mat-label>
+          <textarea matInput formControlName="message" placeholder="Message"></textarea>
+        </mat-form-field>
+        </p> -->
+      </form>
+    </mat-card>
+
+    <button type="submit" mat-raised-button [disabled]="!detailForm.valid">Submit</button>
   </form>
-</mat-card>
+</main>

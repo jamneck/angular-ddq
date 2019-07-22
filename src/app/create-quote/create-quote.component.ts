@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
 
@@ -14,7 +14,8 @@ import {PartsService} from '../parts.service';
   styleUrls: ['./create-quote.component.css']
 })
 export class CreateQuoteComponent implements OnInit {
-  detailForm;
+  detailForm: FormGroup;
+  responseForm: FormGroup;
 
   partNameOptions: string[];
   filteredPartNameOptions: Observable<string[]>[] = [];
@@ -42,19 +43,17 @@ export class CreateQuoteComponent implements OnInit {
 
   initForm() {
     this.detailForm = this.fb.group({
-      parts: this.fb.array([
-        this.partForm()
-      ]),
-      labour: this.fb.array([
-        this.labourForm()
-      ]),
+      parts: this.fb.array([]),
+      labour: this.fb.array([]),
       consumablesCost: null,
       expiryDate: '',  // auto one month ahead (14 or 30 days)
       comments: ''
     })
 
-    this.filteredPartNameOptions.push(this.partNameChanges());
-    this.filteredLabourNameOptions.push(this.labourNameChanges());
+    this.responseForm = this.fb.group({
+      cost: null,
+      message: 'Please feel free to ask any questions'
+    })
   }
 
   partForm() {
@@ -87,6 +86,10 @@ export class CreateQuoteComponent implements OnInit {
         startWith(''),
         map(value => this._filter(value, this.labourNameOptions))
       )
+  }
+
+  anyItems() {
+    return this.parts.controls.length || this.labour.controls.length
   }
 
   get totalCost() {
