@@ -11,3 +11,8 @@
 .link {
   color: #f19430;
 }
+
+.remove-link {
+  color: #133546;
+  text-decoration: none;
+}

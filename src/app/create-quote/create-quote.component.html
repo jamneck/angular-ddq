@@ -6,7 +6,7 @@
         <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
 
           <mat-form-field fxFlex="30">
-            <mat-label>Name</mat-label>
+            <mat-label>Description</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName" autocomplete="off">
             <mat-autocomplete #autoName="matAutocomplete">
               <mat-option *ngFor="let option of filteredPartNameOptions[i] | async" [value]="option">
@@ -21,18 +21,18 @@
           </mat-form-field>
 
           <mat-form-field>
-            <mat-label>Unit</mat-label>
+            <mat-label>Unit Price</mat-label>
             <input type="number" matInput formControlName="unitCost">
             <span matPrefix>R&nbsp;</span>
           </mat-form-field>
 
           <div>
             <mat-label>Price</mat-label>
-            <p>R{{ partItemTotal(i) }}</p>
+            <p>R {{ partItemTotal(i) }}</p>
           </div>
 
           <div>
-            <a href="javascript:void(0)" (click)="removePart(i)">X</a>
+            <a href="javascript:void(0)" (click)="removePart(i)" class="remove-link">x</a>
           </div>
         </div>
       </div>
@@ -46,7 +46,7 @@
         <div [formGroupName]="i" fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="30px">
 
           <mat-form-field fxFlex="30">
-            <mat-label>Name</mat-label>
+            <mat-label>Description</mat-label>
             <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="name" [matAutocomplete]="autoName">
             <mat-autocomplete #autoName="matAutocomplete">
               <mat-option *ngFor="let option of filteredLabourNameOptions[i] | async" [value]="option">
@@ -68,11 +68,11 @@
 
           <div>
             <mat-label>Price</mat-label>
-            <p>R{{ labourItemTotal(i) }}</p>
+            <p>R {{ labourItemTotal(i) }}</p>
           </div>
 
           <div>
-            <a href="javascript:void(0)" (click)="removeLabour(i)">X</a>
+            <a href="javascript:void(0)" (click)="removeLabour(i)" class="remove-link">x</a>
           </div>
         </div>
       </div>
@@ -98,8 +98,10 @@
         </mat-form-field>
         </p> -->
       </form>
+      <mat-card-actions>
+        <button type="submit" mat-raised-button color="primary" [disabled]="!detailForm.valid">Submit</button>
+      </mat-card-actions>
     </mat-card>
 
-    <button type="submit" mat-raised-button [disabled]="!detailForm.valid">Submit</button>
   </form>
 </main>
