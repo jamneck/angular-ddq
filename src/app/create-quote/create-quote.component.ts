@@ -14,7 +14,7 @@ import {PartsService} from '../parts.service';
   styleUrls: ['./create-quote.component.css']
 })
 export class CreateQuoteComponent implements OnInit {
-  quoteForm;
+  detailForm;
 
   partNameOptions: string[];
   filteredPartNameOptions: Observable<string[]>[] = [];
@@ -28,19 +28,11 @@ export class CreateQuoteComponent implements OnInit {
   ) { }
 
   get parts() {
-    return this.quoteForm.get('parts') as FormArray;
+    return this.detailForm.get('parts') as FormArray;
   }
 
   get labour() {
-    return this.quoteForm.get('labour') as FormArray;
-  }
-
-  get consumables() {
-    return this.quoteForm.get('consumables') as FormArray;
-  }
-
-  get other() {
-    return this.quoteForm.get('other') as FormArray;
+    return this.detailForm.get('labour') as FormArray;
   }
 
   ngOnInit() {
@@ -49,7 +41,7 @@ export class CreateQuoteComponent implements OnInit {
   }
 
   initForm() {
-    this.quoteForm = this.fb.group({
+    this.detailForm = this.fb.group({
       parts: this.fb.array([
         this.partForm()
       ]),
@@ -57,7 +49,8 @@ export class CreateQuoteComponent implements OnInit {
         this.labourForm()
       ]),
       consumablesCost: null,
-      expiryDate: this.fb.array([]),
+      expiryDate: '',  // auto one month ahead (14 or 30 days)
+      comments: ''
     })
 
     this.filteredPartNameOptions.push(this.partNameChanges());
@@ -77,22 +70,6 @@ export class CreateQuoteComponent implements OnInit {
       name: '',
       duration: null,
       hourlyCost: null,
-    });
-  }
-
-  consumableForm() {
-    return this.fb.group({
-      name: '',
-      quantity: '',
-      cost: ''
-    });
-  }
-
-  otherForm() {
-    return this.fb.group({
-      name: '',
-      quantity: '',
-      cost: ''
     });
   }
 
@@ -142,7 +119,7 @@ export class CreateQuoteComponent implements OnInit {
 
   onSubmit() {
     // TODO: Use EventEmitter with form value
-    alert(JSON.stringify(this.quoteForm.value));
+    alert(JSON.stringify(this.detailForm.value));
   }
 
   getParts() {

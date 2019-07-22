@@ -1,5 +1,5 @@
 <mat-card>
-  <form [formGroup]="quoteForm" (ngSubmit)="onSubmit()">
+  <form [formGroup]="detailForm" (ngSubmit)="onSubmit()">
     <h1>Quote</h1>
 
     <div>
@@ -85,6 +85,6 @@
     </div>
     <h2>Total: R{{ totalCost }}</h2>
 
-    <button type="submit" mat-button [disabled]="!quoteForm.valid">Submit</button>
+    <button type="submit" mat-button [disabled]="!detailForm.valid">Submit</button>
   </form>
 </mat-card>
