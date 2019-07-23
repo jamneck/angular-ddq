@@ -1,4 +1,62 @@
 <main class="mat-typography">
+  <mat-card fxLayout="row">
+    <div fxFlex="33">
+      <h4>Customer Details</h4>
+      <div fxLayout="row wrap">
+        <div fxFlex="40">Name</div>
+        <div fxFlex="60">John Smith</div>
+
+        <div fxFlex="40">Address</div>
+        <div fxFlex="60">21 New Street, Durbanville, Cape Town</div>
+
+        <div fxFlex="40">Phone</div>
+        <div fxFlex="60">0821234567</div>
+      </div>
+    </div>
+    <div fxFlex="33">
+      <h4>Vehicle Details</h4>
+      <div fxLayout="row wrap">
+        <div fxFlex="40">Make</div>
+        <div fxFlex="60">Audi</div>
+
+        <div fxFlex="40">Model</div>
+        <div fxFlex="60">A4</div>
+
+        <div fxFlex="40">Year</div>
+        <div fxFlex="60">2010</div>
+
+        <div fxFlex="40">Type</div>
+        <div fxFlex="60">2.0 Tdi Ambition (b8)  (Diesel) (Manual)</div>
+
+        <div fxFlex="40">Milage</div>
+        <div fxFlex="60">110000 km</div>
+
+        <div fxFlex="40">Last Service</div>
+        <div fxFlex="60">90000 km</div>
+
+        <div fxFlex="40">Registration</div>
+        <div fxFlex="60">YH587F GP</div>
+
+        <div fxFlex="40">VIN</div>
+        <div fxFlex="60">JHGJFJY66786GHJGGH4335</div>
+      </div>
+    </div>
+    <div fxFlex="33">
+      <h4>Quote Details</h4>
+      <div fxLayout="row wrap" fxLayoutAlign="start center">
+        <div fxFlex="40">Expiry Date</div>
+        <div fxFlex="60">
+          <mat-form-field>
+            <mat-label></mat-label>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date" disabled>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </mat-card>
+
   <form [formGroup]="detailForm" (ngSubmit)="onSubmit()">
     <mat-card>
       <h4>Parts</h4>

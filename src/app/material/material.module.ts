@@ -7,6 +7,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDividerModule} from '@angular/material/divider';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 
 
 const modules = [
@@ -16,7 +17,8 @@ const modules = [
   MatButtonModule,
   MatCardModule,
   MatSelectModule,
-  MatDividerModule
+  MatDividerModule,
+  MatDatepickerModule,
 ];
 
 @NgModule({

@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MaterialModule } from './material/material.module';
+import { MatNativeDateModule } from '@angular/material/core';
 
 import { AppComponent } from './app.component';
 import { CreateQuoteComponent } from './create-quote/create-quote.component';
@@ -20,6 +21,7 @@ import { CreateQuoteComponent } from './create-quote/create-quote.component';
     HttpClientModule,
     FlexLayoutModule,
     MaterialModule,
+    MatNativeDateModule,
     RouterModule.forRoot([
       { path: '', component: CreateQuoteComponent }
     ])
